@@ -19,6 +19,7 @@
     "@angular/platform-browser": "8.2.14",
     "@angular/platform-browser-dynamic": "8.2.14",
     "@angular/router": "8.2.14",
+    "bootstrap": "4.3.1",
     "express": "4.17.1",
     "path": "0.12.7",
     "rxjs": "6.4.0",
