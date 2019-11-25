@@ -5,14 +5,14 @@
     "types": []
   },
   "files": [
-    "src/main.ts",
-    "src/polyfills.ts"
+    "client/src/main.ts",
+    "client/src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.ts"
+    "client/src/**/*.ts"
   ],
   "exclude": [
-    "src/test.ts",
-    "src/**/*.spec.ts"
+    "client/src/test.ts",
+    "client/src/**/*.spec.ts"
   ]
 }

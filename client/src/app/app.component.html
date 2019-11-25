@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}">Home</a>
+      </li>
+      <ng-container *ngIf="user$ | async">
+        <li class="nav-item" >
+          <a class="nav-link"
+             routerLink="/profile"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" (click)="logout()">Logout</button>
+        </li>
+      </ng-container>
+      <li class="nav-item" *ngIf="!(user$ | async)">
+        <a class="nav-link"
+           routerLink="/login"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}">Login</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>

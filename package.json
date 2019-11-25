@@ -2,12 +2,11 @@
   "name": "angular-authorization",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
+    "start:client": "ng serve",
+    "start:server": "node server/server.js",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -19,11 +18,15 @@
     "@angular/platform-browser": "8.2.14",
     "@angular/platform-browser-dynamic": "8.2.14",
     "@angular/router": "8.2.14",
+    "body-parser": "1.19.0",
     "bootstrap": "4.3.1",
+    "cors": "2.8.5",
     "express": "4.17.1",
+    "jsonwebtoken": "8.5.1",
     "path": "0.12.7",
     "rxjs": "6.4.0",
     "tslib": "1.10.0",
+    "uuid": "3.3.3",
     "zone.js": "0.9.1"
   },
   "devDependencies": {

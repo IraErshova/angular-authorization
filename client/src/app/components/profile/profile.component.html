@@ -1,0 +1,36 @@
+<div class="container mt-5">
+  <div class="alert alert-warning" role="alert">
+    Page with private data
+  </div>
+  <div class="jumbotron">
+    <h1>Profile</h1>
+    <ul>
+      <li><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</li>
+      <li><strong>Gender:</strong> {{ user.gender }}</li>
+      <li><strong>Email:</strong> {{ user.email }}</li>
+      <li><strong>City:</strong> {{ user.city }}</li>
+      <li><strong>Phone:</strong> {{ user.phone }}</li>
+    </ul>
+  </div>
+  <h3>Job List</h3>
+  <table class="table">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Company Name</th>
+      <th scope="col">Department</th>
+      <th scope="col">Title</th>
+      <th scope="col">EIN</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let job of (jobList$ | async); let i = index">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ job.company_name }}</td>
+      <td>{{ job.department }}</td>
+      <td>{{ job.title }}</td>
+      <td>{{ job.ein }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,43 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-10">
+      <h2 class="mb-4">Please sign in</h2>
+      <form #loginForm="ngForm" (ngSubmit)="login()" (change)="resetError()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text"
+                 class="form-control"
+                 id="username"
+                 name="username"
+                 placeholder="Enter username"
+                 required
+                 [ngClass]="{'is-invalid': username.invalid && (username.dirty || username.touched)}"
+                 [(ngModel)]="form.username"
+                 #username="ngModel">
+          <small *ngIf="username.invalid && (username.dirty || username.touched)"
+               class="form-text text-danger">
+              Username is required
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password"
+                 class="form-control"
+                 id="password"
+                 name="password"
+                 placeholder="Password"
+                 required
+                 [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}"
+                 [(ngModel)]="form.password"
+                 #password="ngModel">
+          <small *ngIf="password.invalid && (password.dirty || password.touched)"
+               class="form-text text-danger">
+            Password is required
+          </small>
+        </div>
+        <p class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
