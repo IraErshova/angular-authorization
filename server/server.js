@@ -49,57 +49,22 @@ app.post('/login', function (req, res) {
 /**
  * Get job list for current user
  */
-app.get('/job-list', jwtMiddleware, function (req, res) {
-  const jobList = mockDB.jobs.filter(job => job.user_id === req.user.id);
+app.get('/job-list', function (req, res) {
+  const userId = req.query.userId;
+
+  if (!userId) {
+    res.status(400).send('There is no user data');
+  }
+
+  const jobList = mockDB.jobs.filter(job => job.user_id === userId);
 
   res.send(jobList);
 });
 
-/**
- * Get current user data
- */
-app.get('/current-user', jwtMiddleware, function (req, res) {
-  const currentUser = mockDB.users.find(user => user.id === req.user.id);
-
-  res.send(currentUser);
-});
-
 app.post('/refresh-token', function (req, res) {
-  const refreshToken = req.body.refreshToken;
-
-  if (!refreshToken) {
-    return res.status(403).send('Access is forbidden');
-  }
-
-  try {
-    const newTokens = jwtService.refreshToken(refreshToken, res);
-
-    res.send(newTokens);
-  } catch (err) {
-    const message = (err && err.message) || err;
-    res.status(403).send(message);
-  }
+  // update access and refresh tokens
 });
 
 app.listen(8000, function () {
   console.log('Server listening on port 8000!');
 });
-
-function jwtMiddleware(req, res, next) {
-  // get token from headers object
-  const token = req.get('Authorization');
-  // check token
-  if (!token) {
-    return res.status(401).send('Token is invalid');
-  }
-
-  jwtService.verifyJWTToken(token)
-    .then(user => {
-      // put user's information to req object
-      req.user = user;
-      // call next to finish this middleware function
-      next();
-    }).catch(err => {
-    res.status(401).send(err);
-  });
-}

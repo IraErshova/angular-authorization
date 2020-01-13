@@ -38,6 +38,12 @@ export class AuthService {
     this.localStorageService.removeItem('token');
     this.localStorageService.removeItem('refreshToken');
     this.user$.next(null);
+    this.localStorageService.removeItem('token');
+    this.localStorageService.removeItem('refreshToken');
+  }
+
+  private setToken(key: string, token: string): void {
+    this.localStorageService.setItem(key, token);
   }
 
   getCurrentUser(): Observable<User> {
