@@ -6,8 +6,6 @@ const jwtService = require('./jwt');
 
 const app = express();
 
-const jwtSecretString = 'everybody loves ice cream';
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
