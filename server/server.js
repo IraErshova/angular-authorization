@@ -69,29 +69,3 @@ app.post('/refresh-token', function (req, res) {
 app.listen(8000, function () {
   console.log('Server listening on port 8000!');
 });
-
-function getAccessToken(payload) {
-  return jwt.sign({user: payload}, jwtSecretString, { expiresIn: '15min' });
-}
-
-function getRefreshToken(payload) {
-  // get all user's refresh tokens from DB
-  const userRefreshTokens = mockDB.tokens.filter(token => token.userId === payload.id);
-
-  // check if there are 5 or more refresh tokens,
-  // which have already been generated. In this case we should
-  // remove all this refresh tokens and leave only new one for security reason
-  if (userRefreshTokens.length >= 5) {
-    mockDB.tokens = mockDB.tokens.filter(token => token.userId !== payload.id);
-  }
-
-  const refreshToken = jwt.sign({user: payload}, jwtSecretString, { expiresIn: '30d' });
-
-  mockDB.tokens.push({
-    id: uuidv1(),
-    userId: payload.id,
-    refreshToken
-  });
-
-  return refreshToken;
-}
