@@ -30,7 +30,32 @@ function getRefreshToken(payload) {
   return refreshToken;
 }
 
+function verifyJWTToken(token) {
+  return new Promise((resolve, reject) => {
+    if (!token.startsWith('Bearer')) {
+      // Reject if there is no Bearer in the token
+      return reject('Token is invalid');
+    }
+    // Remove Bearer from string
+    token = token.slice(7, token.length);
+
+    jwt.verify(token, jwtSecretString, (err, decodedToken) => {
+      if (err) {
+        return reject(err.message);
+      }
+
+      // Check the decoded user
+      if (!decodedToken || !decodedToken.user) {
+        return reject('Token is invalid');
+      }
+
+      resolve(decodedToken.user);
+    })
+  });
+}
+
 module.exports = {
   getAccessToken,
-  getRefreshToken
+  getRefreshToken,
+  verifyJWTToken
 };

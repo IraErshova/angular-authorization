@@ -13,11 +13,7 @@ export class JobService {
 
   constructor(private http: HttpClient) { }
 
-  getJobList(userId: string): Observable<Job[]> {
-    return this.http.get<Job[]>(`${environment.apiUrl}/job-list`, {
-      params: {
-        userId
-      }
-    });
+  getJobList(): Observable<Job[]> {
+    return this.http.get<Job[]>(`${environment.apiUrl}/job-list`);
   }
 }

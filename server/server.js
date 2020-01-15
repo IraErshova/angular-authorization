@@ -48,14 +48,8 @@ app.post('/login', function (req, res) {
 /**
  * Get job list for current user
  */
-app.get('/job-list', function (req, res) {
-  const userId = req.query.userId;
-
-  if (!userId) {
-    res.status(400).send('There is no user data');
-  }
-
-  const jobList = mockDB.jobs.filter(job => job.user_id === userId);
+app.get('/job-list', jwtMiddleware, function (req, res) {
+  const jobList = mockDB.jobs.filter(job => job.user_id === req.user.id);
 
   res.send(jobList);
 });
@@ -67,3 +61,22 @@ app.post('/refresh-token', function (req, res) {
 app.listen(8000, function () {
   console.log('Server listening on port 8000!');
 });
+
+function jwtMiddleware(req, res, next) {
+  // get token from headers object
+  const token = req.get('Authorization');
+  // check token
+  if (!token) {
+    return res.status(401).send('Token is invalid');
+  }
+
+  jwtService.verifyJWTToken(token)
+    .then(user => {
+      // put user's information to req object
+      req.user = user;
+      // call next to finish this middleware function
+      next();
+    }).catch(err => {
+    res.status(401).send(err);
+  });
+}
