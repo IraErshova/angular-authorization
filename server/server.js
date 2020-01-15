@@ -54,6 +54,15 @@ app.get('/job-list', jwtMiddleware, function (req, res) {
   res.send(jobList);
 });
 
+/**
+ * Get current user data
+ */
+app.get('/current-user', jwtMiddleware, function (req, res) {
+  const currentUser = mockDB.users.find(user => user.id === req.user.id);
+
+  res.send(currentUser);
+});
+
 app.post('/refresh-token', function (req, res) {
   // update access and refresh tokens
 });

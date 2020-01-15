@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { AuthService } from './services/auth.service';
 import { User } from './interfaces/user.interface';
@@ -14,12 +14,13 @@ import { User } from './interfaces/user.interface';
 })
 export class AppComponent implements OnInit {
   user$: Observable<User>;
+  user: User;
 
   constructor(private authService: AuthService,
               private router: Router) {}
 
   ngOnInit(): void {
-    this.user$ = this.authService.user$.pipe(share());
+    this.user$ = this.authService.getCurrentUser().pipe(share());
   }
 
   logout(): void {

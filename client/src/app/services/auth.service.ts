@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { User } from '../interfaces/user.interface';
@@ -35,9 +35,37 @@ export class AuthService {
   }
 
   logout(): void {
-    this.user$.next(null);
     this.localStorageService.removeItem('token');
     this.localStorageService.removeItem('refreshToken');
+    this.user$.next(null);
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.user$.pipe(
+      switchMap(user => {
+        // check if we already have user data
+        if (user) {
+          return of(user);
+        }
+
+        const token = this.localStorageService.getItem('token');
+        // if there is token then fetch the current user
+        if (token) {
+          return this.fetchCurrentUser();
+        }
+
+        return of(null);
+      })
+    );
+  }
+
+  fetchCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/current-user`)
+      .pipe(
+        tap(user => {
+          this.user$.next(user);
+        })
+      );
   }
 
   private setToken(key: string, token: string): void {
