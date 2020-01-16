@@ -68,6 +68,21 @@ export class AuthService {
       );
   }
 
+  refreshToken(): Observable<{accessToken: string; refreshToken: string}> {
+    const refreshToken = this.localStorageService.getItem('refreshToken');
+
+    return this.http.post<{accessToken: string; refreshToken: string}>(
+      `${environment.apiUrl}/refresh-token`,
+      {
+        refreshToken
+      }).pipe(
+        tap(response => {
+          this.setToken('token', response.accessToken);
+          this.setToken('refreshToken', response.refreshToken);
+        })
+    );
+  }
+
   private setToken(key: string, token: string): void {
     this.localStorageService.setItem(key, token);
   }

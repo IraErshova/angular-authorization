@@ -35,6 +35,7 @@ app.post('/login', function (req, res) {
     email: user.email,
     username: user.username
   };
+
   const accessToken = jwtService.getAccessToken(payload);
   const refreshToken = jwtService.getRefreshToken(payload);
 
@@ -64,7 +65,20 @@ app.get('/current-user', jwtMiddleware, function (req, res) {
 });
 
 app.post('/refresh-token', function (req, res) {
-  // update access and refresh tokens
+  const refreshToken = req.body.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(403).send('Access is forbidden');
+  }
+
+  try {
+    const newTokens = jwtService.refreshToken(refreshToken, res);
+
+    res.send(newTokens);
+  } catch (err) {
+    const message = (err && err.message) || err;
+    res.status(403).send(message);
+  }
 });
 
 app.listen(8000, function () {

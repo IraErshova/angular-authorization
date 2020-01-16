@@ -54,8 +54,65 @@ function verifyJWTToken(token) {
   });
 }
 
+function refreshToken(token) {
+  // get decoded data
+  const decodedToken = jwt.verify(token, jwtSecretString);
+  // find the user in the user table
+  const user = mockDB.users.find(user => user.id = decodedToken.user.id);
+
+  if (!user) {
+    throw new Error(`Access is forbidden`);
+  }
+
+  // get all user's refresh tokens from DB
+  const allRefreshTokens = mockDB.tokens.filter(refreshToken => refreshToken.userId === user.id);
+
+  if (!allRefreshTokens || !allRefreshTokens.length) {
+    throw new Error(`There is no refresh token for the user with`);
+  }
+
+  const currentRefreshToken = allRefreshTokens.find(refreshToken => refreshToken.refreshToken === token);
+
+  if (!currentRefreshToken) {
+    throw new Error(`Refresh token is wrong`);
+  }
+  // user's data for new tokens
+  const payload = {
+    id : user.id,
+    email: user.email,
+    username: user.username
+  };
+  // get new refresh and access token
+  const newRefreshToken = getUpdatedRefreshToken(token, payload);
+  const newAccessToken = getAccessToken(payload);
+
+  return {
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken
+  };
+}
+
+function getUpdatedRefreshToken(oldRefreshToken, payload) {
+  // create new refresh token
+  const newRefreshToken = jwt.sign({user: payload}, jwtSecretString, { expiresIn: '30d' });
+  // replace current refresh token with new one
+  mockDB.tokens = mockDB.tokens.map(token => {
+    if (token.refreshToken === oldRefreshToken) {
+      return {
+        ...token,
+        refreshToken: newRefreshToken
+      };
+    }
+
+    return token;
+  });
+
+  return newRefreshToken;
+}
+
 module.exports = {
   getAccessToken,
   getRefreshToken,
-  verifyJWTToken
+  verifyJWTToken,
+  refreshToken
 };

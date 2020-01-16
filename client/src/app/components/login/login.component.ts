@@ -23,7 +23,7 @@ export class LoginComponent {
   login(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.form).subscribe(() => {
-        this.router.navigate(['/']);
+        this.router.navigateByUrl('/');
       }, err => {
         this.errorMessage = err && err.error;
       });
