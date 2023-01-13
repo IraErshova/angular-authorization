@@ -15,7 +15,7 @@ export class LoginComponent {
   };
   errorMessage: string;
 
-  @ViewChild('loginForm', {static: false}) loginForm: NgForm;
+  @ViewChild('loginForm') loginForm: NgForm;
 
   constructor(private authService: AuthService,
               private router: Router) { }
